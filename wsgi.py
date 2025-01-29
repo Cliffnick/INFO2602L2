@@ -107,6 +107,7 @@ def toggle_todo_command(todo_id, username):
   todo = Todo.query.filter_by(id=todo_id, user_id=user.id).first()
   if not todo:
     print(f'{username} has no todo id {todo_id}')
+    return
 
   todo.toggle()
   print(f'{todo.text} is {"done" if todo.done else "not done"}!')
@@ -120,6 +121,8 @@ def add_todo_category_command(username, todo_id, category):
   if not user:
     print(f'{username} not found!')
     return
+
+  
 
   res = user.add_todo_category(todo_id, category)
   if not res:
