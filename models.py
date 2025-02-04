@@ -27,6 +27,29 @@ class User(db.Model):
   def __repr__(self):
     return f'<User {self.id} {self.username} - {self.email}>'
 
+  def add_todo_category(self, todo_id, category_text):
+    # Fetch the todo by id
+    todo = Todo.query.filter_by(id=todo_id, user_id=self.id).first()
+    # Make sure the todo exists and belongs to the current user
+    if not todo:
+        return False
+
+    # Check if category already exists for current user
+    category = Category.query.filter_by(text=category_text, user_id=self.id).first()
+    if not category:
+        # Create new category
+        category = Category(user_id=self.id, text=category_text)
+        db.session.add(category)
+        db.session.commit()
+
+    # Associate todo with the category if not already associated
+    if category not in todo.categories:
+        todo.categories.append(category)
+        db.session.add(todo)
+        db.session.commit()
+
+    return True
+
 class Todo(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) #set userid as a foreign key to user.id 
