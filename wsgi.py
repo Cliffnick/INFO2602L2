@@ -121,9 +121,7 @@ def add_todo_category_command(username, todo_id, category):
   if not user:
     print(f'{username} not found!')
     return
-
-  
-
+    
   res = user.add_todo_category(todo_id, category)
   if not res:
     print(f'{username} has no todo id {todo_id}')
